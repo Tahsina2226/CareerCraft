@@ -18,9 +18,7 @@ interface Blog {
   coverUrl?: string;
   published: boolean;
   createdAt: string;
-  author: {
-    name: string;
-  };
+  author: { name: string };
   views?: number;
   likes?: number;
 }
@@ -53,33 +51,16 @@ export default function AdminDashboard() {
 
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<
     "dashboard" | "blogs" | "projects"
   >("dashboard");
-  const [stats, setStats] = useState<DashboardStats>({
-    totalBlogs: 0,
-    publishedBlogs: 0,
-    draftBlogs: 0,
-    totalProjects: 0,
-    totalViews: 0,
-    totalLikes: 0,
-    monthlyViews: [
-      1200, 1900, 3000, 5000, 2000, 3000, 4500, 5200, 4800, 6000, 5500, 7000,
-    ],
-    monthlyLikes: [
-      400, 600, 800, 1200, 900, 1100, 1500, 1800, 1600, 2000, 1900, 2200,
-    ],
-  });
   const [deleteAlert, setDeleteAlert] = useState<{
     show: boolean;
     type: "blog" | "project";
     item: Blog | Project | null;
-  }>({
-    show: false,
-    type: "blog",
-    item: null,
-  });
+  }>({ show: false, type: "blog", item: null });
 
   useEffect(() => {
     if (!token) {
@@ -89,39 +70,21 @@ export default function AdminDashboard() {
 
     const fetchData = async () => {
       try {
-        const [blogsRes, projectsRes] = await Promise.all([
+        const [blogsRes, projectsRes, statsRes] = await Promise.all([
           API.get("/blogs", { headers: { Authorization: `Bearer ${token}` } }),
           API.get("/projects", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          API.get("/dashboard", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
 
         setBlogs(blogsRes.data);
         setProjects(projectsRes.data);
-
-        const publishedBlogs = blogsRes.data.filter(
-          (blog: Blog) => blog.published
-        ).length;
-        const totalViews = blogsRes.data.reduce(
-          (sum: number, blog: Blog) => sum + (blog.views || 0),
-          0
-        );
-        const totalLikes = blogsRes.data.reduce(
-          (sum: number, blog: Blog) => sum + (blog.likes || 0),
-          0
-        );
-
-        setStats((prev) => ({
-          ...prev,
-          totalBlogs: blogsRes.data.length,
-          publishedBlogs,
-          draftBlogs: blogsRes.data.length - publishedBlogs,
-          totalProjects: projectsRes.data.length,
-          totalViews,
-          totalLikes,
-        }));
+        setStats(statsRes.data);
       } catch {
-        toast.error("Failed to load data");
+        toast.error("Failed to load dashboard data");
       } finally {
         setLoading(false);
       }
@@ -146,16 +109,18 @@ export default function AdminDashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(blogs.filter((b) => b.id !== deleteAlert.item!.id));
-      setStats((prev) => ({
-        ...prev,
-        totalBlogs: prev.totalBlogs - 1,
-        publishedBlogs: (deleteAlert.item as Blog).published
-          ? prev.publishedBlogs - 1
-          : prev.publishedBlogs,
-        draftBlogs: !(deleteAlert.item as Blog).published
-          ? prev.draftBlogs - 1
-          : prev.draftBlogs,
-      }));
+      if (stats) {
+        setStats({
+          ...stats,
+          totalBlogs: stats.totalBlogs - 1,
+          publishedBlogs: (deleteAlert.item as Blog).published
+            ? stats.publishedBlogs - 1
+            : stats.publishedBlogs,
+          draftBlogs: !(deleteAlert.item as Blog).published
+            ? stats.draftBlogs - 1
+            : stats.draftBlogs,
+        });
+      }
       toast.success("Blog deleted successfully!", {
         style: { background: "#B1AB86", color: "#1a1a1a" },
         icon: "🗑️",
@@ -177,7 +142,9 @@ export default function AdminDashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProjects(projects.filter((p) => p.id !== deleteAlert.item!.id));
-      setStats((prev) => ({ ...prev, totalProjects: prev.totalProjects - 1 }));
+      if (stats) {
+        setStats({ ...stats, totalProjects: stats.totalProjects - 1 });
+      }
       toast.success("Project deleted successfully!", {
         style: { background: "#B1AB86", color: "#1a1a1a" },
         icon: "🗑️",
@@ -207,13 +174,17 @@ export default function AdminDashboard() {
         )
       );
 
-      setStats((prev) => ({
-        ...prev,
-        publishedBlogs: blog.published
-          ? prev.publishedBlogs - 1
-          : prev.publishedBlogs + 1,
-        draftBlogs: blog.published ? prev.draftBlogs + 1 : prev.draftBlogs - 1,
-      }));
+      if (stats) {
+        setStats({
+          ...stats,
+          publishedBlogs: blog.published
+            ? stats.publishedBlogs - 1
+            : stats.publishedBlogs + 1,
+          draftBlogs: blog.published
+            ? stats.draftBlogs + 1
+            : stats.draftBlogs - 1,
+        });
+      }
 
       toast.success(
         blog.published ? "Blog moved to drafts" : "Blog published!",
@@ -229,7 +200,7 @@ export default function AdminDashboard() {
     }
   };
 
-  if (loading)
+  if (loading || !stats)
     return (
       <div className="flex justify-center items-center bg-gradient-to-br from-[#B8C4A9] to-[#A8B497] min-h-screen">
         <div className="text-center">

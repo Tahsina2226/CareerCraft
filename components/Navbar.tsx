@@ -44,7 +44,7 @@ export default function Navbar(): JSX.Element {
   const navItems = [
     { href: "/", label: "Home", icon: HiHome },
     { href: "/blogs", label: "Blogs", icon: HiBookOpen },
-    { href: "/projects", label: "Projects", icon: HiCode },
+    { href: "/project", label: "Projects", icon: HiCode },
     ...(token
       ? [{ href: "/dashboard", label: "Dashboard", icon: HiTemplate }]
       : []),
