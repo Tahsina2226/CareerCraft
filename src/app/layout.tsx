@@ -7,10 +7,10 @@ import "./globals.css";
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-[#F9F5F0] text-[#1a1a1a]">
         <AuthProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="mt-6 sm:mt-8 md:mt-12 lg:mt-16">{children}</main>
           <Footer />
         </AuthProvider>
       </body>
