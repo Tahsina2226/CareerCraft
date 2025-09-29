@@ -11,8 +11,6 @@ import {
   HiBookOpen,
   HiCode,
   HiTemplate,
-  HiLogin,
-  HiLogout,
   HiSparkles,
 } from "react-icons/hi";
 
@@ -29,7 +27,6 @@ export default function Navbar(): JSX.Element {
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 10);
 
-      // Hide navbar on scroll down, show on scroll up
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setIsVisible(false);
       } else {
@@ -71,12 +68,10 @@ export default function Navbar(): JSX.Element {
           : "bg-gradient-to-b from-[#0a0a0a] to-transparent backdrop-blur-lg"
       }`}
     >
-      {/* Animated background gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#B1AB86]/5 via-transparent to-[#B1AB86]/5 opacity-50"></div>
 
       <div className="relative mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="flex justify-between items-center h-16">
-          {/* Logo with enhanced design */}
           <Link
             href="/"
             className="group relative flex items-center gap-3 font-bold text-[#D7D7D7] hover:text-[#B1AB86] text-xl transition-all duration-500"
@@ -91,7 +86,6 @@ export default function Navbar(): JSX.Element {
             <HiSparkles className="opacity-0 group-hover:opacity-100 w-4 h-4 text-[#B1AB86] group-hover:rotate-12 transition-all duration-500 transform" />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -106,24 +100,15 @@ export default function Navbar(): JSX.Element {
                       : "text-[#D7D7D7] hover:text-[#B1AB86] hover:bg-[#B1AB86]/10"
                   }`}
                 >
-                  {/* Animated underline for active state */}
                   {isActive && (
                     <div className="bottom-0 left-1/2 absolute bg-[#B1AB86] rounded-full w-1 h-1 -translate-x-1/2 transform"></div>
                   )}
-
                   <Icon
                     className={`w-5 h-5 transition-transform duration-300 ${
                       isActive ? "scale-110" : "group-hover:scale-110"
                     }`}
                   />
-
-                  <span className="relative font-medium">
-                    {item.label}
-                    {/* Hover effect */}
-                    <span className="bottom-0 left-0 absolute bg-[#B1AB86] w-0 group-hover:w-full h-0.5 transition-all duration-300"></span>
-                  </span>
-
-                  {/* Glow effect */}
+                  <span className="relative font-medium">{item.label}</span>
                   {isActive && (
                     <div className="-z-10 absolute inset-0 bg-[#B1AB86]/5 blur-md rounded-xl"></div>
                   )}
@@ -134,27 +119,20 @@ export default function Navbar(): JSX.Element {
             {token ? (
               <button
                 onClick={handleLogout}
-                className="group relative flex items-center gap-2 hover:bg-red-400/10 px-4 py-2 rounded-xl overflow-hidden text-red-400 transition-all duration-300"
+                className="hover:bg-red-400/10 px-4 py-2 rounded-xl font-medium text-red-400 transition-all duration-300"
               >
-                <div className="absolute inset-0 bg-red-400/5 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 transform"></div>
-                <HiLogout className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                <span className="font-medium">Logout</span>
+                Logout
               </button>
             ) : (
               <Link
                 href="/login"
-                className="group relative flex items-center gap-2 bg-gradient-to-r from-[#B1AB86] hover:from-[#C5BF9A] to-[#9C9675] hover:to-[#B1AB86] shadow-lg hover:shadow-[#B1AB86]/20 hover:shadow-xl px-4 py-2 rounded-xl overflow-hidden text-[#1a1a1a] transition-all duration-500"
+                className="bg-gradient-to-r from-[#B1AB86] to-[#9C9675] px-4 py-2 rounded-xl font-semibold text-[#1a1a1a] transition-all duration-300"
               >
-                {/* Shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transition-transform translate-x-[-100%] group-hover:translate-x-[100%] duration-1000 transform"></div>
-
-                <HiLogin className="z-10 relative w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                <span className="z-10 relative font-semibold">Login</span>
+                Login
               </Link>
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
@@ -171,7 +149,6 @@ export default function Navbar(): JSX.Element {
         </div>
       </div>
 
-      {/* Enhanced Mobile Menu */}
       {isOpen && (
         <div className="md:hidden space-y-2 bg-[#0a0a0a]/95 shadow-2xl backdrop-blur-xl px-4 py-4 border-[#B1AB86]/20 border-t">
           {navItems.map((item) => {
@@ -194,11 +171,6 @@ export default function Navbar(): JSX.Element {
                   }`}
                 />
                 <span className="font-medium">{item.label}</span>
-
-                {/* Active indicator */}
-                {isActive && (
-                  <div className="bg-[#B1AB86] ml-auto rounded-full w-2 h-2 animate-pulse"></div>
-                )}
               </Link>
             );
           })}
@@ -207,19 +179,17 @@ export default function Navbar(): JSX.Element {
             {token ? (
               <button
                 onClick={handleLogout}
-                className="group flex items-center gap-3 hover:bg-red-400/10 px-4 py-3 rounded-xl w-full text-red-400 transition-all duration-300"
+                className="hover:bg-red-400/10 px-4 py-3 rounded-xl w-full font-medium text-red-400 transition-all duration-300"
               >
-                <HiLogout className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                <span className="font-medium">Logout</span>
+                Logout
               </button>
             ) : (
               <Link
                 href="/login"
                 onClick={closeMenu}
-                className="flex items-center gap-3 bg-gradient-to-r from-[#B1AB86] to-[#9C9675] hover:shadow-[#B1AB86]/20 hover:shadow-lg px-4 py-3 rounded-xl font-semibold text-[#1a1a1a] transition-all duration-300"
+                className="bg-gradient-to-r from-[#B1AB86] to-[#9C9675] px-4 py-3 rounded-xl w-full font-semibold text-[#1a1a1a] transition-all duration-300"
               >
-                <HiLogin className="w-5 h-5" />
-                <span>Login</span>
+                Login
               </Link>
             )}
           </div>
