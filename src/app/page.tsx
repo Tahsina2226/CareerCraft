@@ -9,27 +9,46 @@ import {
   HiAcademicCap,
   HiCode,
   HiArrowRight,
-  HiSparkles,
-  HiFire,
   HiDownload,
+  HiChevronDown,
   HiStar,
-  HiGlobe,
-  HiChip,
+  HiSparkles,
 } from "react-icons/hi";
+import FloatingBackground from "../../components/home/FloatingBackground";
+import ScrollIndicator from "../../components/home/ScrollIndicator";
+import StatsSection from "../../components/home/StatsSection";
+import ProfessionalSnapshot from "../../components/home/ProfessionalSnapshot";
+import CurrentlyLearning from "../../components/home/CurrentlyLearning";
 
 export default function HomePage() {
   const [isVisible, setIsVisible] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsVisible(true);
 
-    const handleMouseMove = (e) => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section");
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          setActiveSection(section.id);
+        }
+      });
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
+    window.addEventListener("scroll", handleScroll);
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
   const personalInfo = {
@@ -39,111 +58,50 @@ export default function HomePage() {
     email: "tahsinatanvin274@gmail.com",
     phone: "+880 1859 702848",
     avatar: "/images/avatar.jpg",
-    cvFile: "/documents/Tahsina_Tanvin_CV.pdf", // CV file path
     shortBio:
-      "A passionate Computer Science and Engineering student specializing in full-stack development. Dedicated to creating efficient, scalable web applications with modern technologies and best practices.",
+      "I am a motivated and detail-oriented Computer Science and Engineering student with a strong foundation in frontend and backend development, problem-solving, and teamwork.",
   };
 
-  const technicalExpertise = [
-    "React.js with TypeScript",
-    "Node.js & Express.js",
-    "Next.js Framework",
-    "MongoDB & Mongoose ODM",
-    "PostgreSQL Database",
-    "Tailwind CSS & Styling",
-    "Git Version Control",
-    "RESTful API Development",
+  const quickSkills = [
+    "React/TypeScript",
+    "Node.js/Express",
+    "Next.js",
+    "MongoDB",
+    "PostgreSQL",
+    "Tailwind CSS",
+    "Git/GitHub",
+    "REST APIs",
   ];
 
-  const coreCompetencies = [
-    "Proficient in modern React ecosystem with TypeScript for type-safe development",
-    "Experienced in building robust backend systems with Node.js and Express.js",
-    "Skilled in database design and management with both SQL and NoSQL solutions",
-    "Expertise in implementing responsive UI/UX designs with Tailwind CSS",
-    "Strong understanding of REST API architecture and authentication mechanisms",
-  ];
-
-  const achievementMetrics = [
-    { number: "10+", label: "Projects Delivered", icon: HiStar },
-    { number: "2+", label: "Years Experience", icon: HiAcademicCap },
-    { number: "12+", label: "Technologies Mastered", icon: HiChip },
-    { number: "15+", label: "Git Repositories", icon: HiGlobe },
-  ];
-
-  const currentFocusAreas = [
-    "Docker & Containerization",
-    "AWS Cloud Services",
-    "Prisma ORM",
-    "Next.js 14+ Advanced Features",
-    "System Architecture Design",
-  ];
-
-  const floatingShapes = [
-    {
-      style: "top-1/4 left-1/4 bg-[#5D6D4B]",
-      size: "w-72 h-72",
-      animation: "animate-float",
-    },
-    {
-      style: "right-1/3 bottom-1/3 bg-[#B1AB86]",
-      size: "w-96 h-96",
-      animation: "animate-float-delayed",
-    },
-    {
-      style: "top-3/4 left-1/3 bg-[#7D8566]",
-      size: "w-64 h-64",
-      animation: "animate-float-slow",
-    },
-    {
-      style: "top-1/2 right-1/4 bg-[#8A936D]",
-      size: "w-80 h-80",
-      animation: "animate-float-reverse",
-    },
-    {
-      style: "bottom-1/4 right-1/2 bg-[#9CA885]",
-      size: "w-56 h-56",
-      animation: "animate-float-slow-delayed",
-    },
-  ];
-
-  const particles = Array.from({ length: 50 }, (_, i) => ({
-    id: i,
-    style: {
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 20}s`,
-      size: `${Math.random() * 4 + 2}px`,
-    },
-  }));
+  const handleDownloadResume = () => {
+    const link = document.createElement("a");
+    link.href = "/TAHSINA TANVIN's Resume (1).pdf";
+    link.download = "Tahsina_Tanvin_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
-    <div className="bg-gradient-to-br from-[#B8C4A9] via-[#A8B497] to-[#9CA885] pt-20 pb-12 min-h-screen overflow-hidden">
+    <div
+      className={`relative ${
+        darkMode
+          ? "bg-gradient-to-br from-[#2D3B24] via-[#3C4A33] to-[#4A5741]"
+          : "bg-gradient-to-br from-[#B8C4A9] via-[#A8B497] to-[#9CA885]"
+      } pt-24 pb-16 min-h-screen transition-colors duration-500 overflow-hidden`}
+    >
       <div
-        className="z-0 fixed inset-0 opacity-30 pointer-events-none"
+        className="z-0 fixed inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{
           background: `radial-gradient(600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(93, 109, 75, 0.15), transparent 80%)`,
         }}
       />
 
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {floatingShapes.map((shape, index) => (
-          <div
-            key={index}
-            className={`absolute ${shape.style} ${shape.size} ${shape.animation} opacity-5 rounded-full`}
-          />
-        ))}
-
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            className="absolute bg-[#5D6D4B] opacity-20 rounded-full animate-particle-float"
-            style={particle.style}
-          />
-        ))}
-      </div>
+      <FloatingBackground />
+      <ScrollIndicator activeSection={activeSection} />
 
       <div className="z-10 relative mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-        <section className="mb-20 text-center">
+        <section id="home" className="mb-24 text-center">
           <div
             className={`inline-block relative mb-8 transform transition-all duration-1000 ${
               isVisible
@@ -151,66 +109,89 @@ export default function HomePage() {
                 : "translate-y-10 opacity-0"
             }`}
           >
-            <div className="absolute -inset-4 bg-white/30 opacity-50 blur-lg rounded-3xl animate-pulse-slow"></div>
-            <div className="group relative bg-white/90 shadow-2xl hover:shadow-2xl backdrop-blur-xl px-8 py-8 border border-[#B1AB86]/40 rounded-3xl hover:scale-[1.02] transition-all duration-500">
-              <div className="top-0 left-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] border-t-2 border-l-2 rounded-tl-3xl w-8 h-8 transition-opacity duration-300"></div>
-              <div className="top-0 right-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] border-t-2 border-r-2 rounded-tr-3xl w-8 h-8 transition-opacity duration-300"></div>
-              <div className="bottom-0 left-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] border-b-2 border-l-2 rounded-bl-3xl w-8 h-8 transition-opacity duration-300"></div>
-              <div className="right-0 bottom-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] border-r-2 border-b-2 rounded-br-3xl w-8 h-8 transition-opacity duration-300"></div>
+            <div className="absolute -inset-6 bg-gradient-to-br from-[#5D6D4B]/20 to-[#B1AB86]/20 blur-3xl rounded-4xl"></div>
+            <div className="group relative bg-gradient-to-br from-white/95 dark:from-[#2D3B24]/95 to-white/90 dark:to-[#3A4A2E]/95 shadow-2xl hover:shadow-3xl backdrop-blur-xl px-10 py-10 border-[#B1AB86]/40 border-2 dark:border-[#5D6D4B]/40 rounded-3xl hover:scale-[1.02] transition-all duration-500">
+              <div className="top-4 right-4 absolute">
+                <HiSparkles className="w-6 h-6 text-yellow-400 animate-pulse" />
+              </div>
 
-              <div className="flex lg:flex-row flex-col items-center gap-8">
+              <div className="-top-3 left-8 absolute bg-gradient-to-r from-[#5D6D4B] to-[#B1AB86] shadow-lg px-4 py-1 rounded-full">
+                <span className="font-bold text-white text-xs tracking-wide">
+                  AVAILABLE FOR WORK
+                </span>
+              </div>
+
+              <div className="top-0 left-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] dark:border-[#B8C4A9] border-t-2 border-l-2 rounded-tl-3xl w-8 h-8 transition-opacity duration-300"></div>
+              <div className="top-0 right-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] dark:border-[#B8C4A9] border-t-2 border-r-2 rounded-tr-3xl w-8 h-8 transition-opacity duration-300"></div>
+              <div className="bottom-0 left-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] dark:border-[#B8C4A9] border-b-2 border-l-2 rounded-bl-3xl w-8 h-8 transition-opacity duration-300"></div>
+              <div className="right-0 bottom-0 absolute opacity-50 group-hover:opacity-100 border-[#5D6D4B] dark:border-[#B8C4A9] border-r-2 border-b-2 rounded-br-3xl w-8 h-8 transition-opacity duration-300"></div>
+
+              <div className="flex lg:flex-row flex-col items-center gap-10">
                 <div className="group relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] opacity-30 group-hover:opacity-50 blur-lg rounded-3xl transition-opacity animate-pulse duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] opacity-30 group-hover:opacity-50 blur-xl rounded-3xl transition-opacity duration-500"></div>
                   <div className="absolute inset-0 bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] opacity-20 rounded-3xl group-hover:scale-105 transition-transform duration-500"></div>
-                  <img
-                    src={personalInfo.avatar}
-                    alt={personalInfo.name}
-                    className="z-10 relative shadow-lg border-4 border-white rounded-2xl w-32 h-32 object-cover group-hover:rotate-3 group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="right-2 bottom-2 z-20 absolute bg-green-400 border-2 border-white rounded-full w-4 h-4 animate-ping"></div>
-                  <div className="right-2 bottom-2 z-30 absolute bg-green-500 border-2 border-white rounded-full w-4 h-4"></div>
+                  <div className="relative">
+                    <img
+                      src={personalInfo.avatar}
+                      alt={personalInfo.name}
+                      className="z-10 relative shadow-2xl border-4 border-white dark:border-[#2D3B24] rounded-2xl w-36 h-36 object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="-right-2 -bottom-2 z-20 absolute bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] shadow-lg p-2 rounded-full">
+                      <HiStar className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="top-2 right-2 z-20 absolute bg-green-400 border-2 border-white dark:border-[#2D3B24] rounded-full w-4 h-4 animate-pulse"></div>
+                  </div>
                 </div>
-                <div className="lg:text-left text-center">
-                  <h1 className="bg-clip-text bg-gradient-to-r from-[#5D6D4B] via-[#6B7A55] to-[#7D8566] mb-2 font-bold text-transparent text-4xl lg:text-5xl hover:scale-105 transition-transform animate-text-shimmer duration-300">
-                    {personalInfo.name}
-                  </h1>
-                  <p className="mb-4 font-light text-[#7D8566] text-xl animate-fade-in-up">
-                    {personalInfo.title}
-                  </p>
 
-                  <p className="mb-6 max-w-2xl text-[#5D6D4B] leading-relaxed animate-fade-in-up delay-200">
-                    {personalInfo.shortBio}
-                  </p>
+                <div className="flex-1 lg:text-left text-center">
+                  <div className="mb-6">
+                    <h1 className="bg-clip-text bg-gradient-to-r from-[#5D6D4B] dark:from-[#B8C4A9] via-[#6B7A55] dark:via-[#C8C2A5] to-[#7D8566] dark:to-[#D4D8C8] mb-3 font-bold text-transparent text-5xl lg:text-6xl leading-tight hover:scale-105 transition-transform duration-300">
+                      {personalInfo.name}
+                    </h1>
+                    <div className="inline-block relative">
+                      <p className="mb-4 font-light text-[#7D8566] dark:text-[#8A936D] text-xl lg:text-2xl">
+                        {personalInfo.title}
+                      </p>
+                      <div className="bottom-0 left-0 absolute bg-gradient-to-r from-[#5D6D4B] to-[#B1AB86] w-0 group-hover:w-full h-0.5 transition-all duration-500"></div>
+                    </div>
+                  </div>
 
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-6">
-                    <div className="group flex items-center gap-2 bg-white/80 hover:shadow-lg backdrop-blur-sm px-4 py-2 border border-[#B1AB86]/30 rounded-2xl hover:scale-105 transition-transform duration-300">
-                      <HiMap className="w-4 h-4 text-[#5D6D4B] group-hover:scale-110 transition-transform group-hover:animate-bounce duration-300" />
-                      <span className="text-[#7D8566] text-sm">
+                  <div className="relative bg-gradient-to-r from-[#F8F7F0] dark:from-[#2D3B24]/50 to-[#F0EEE0] dark:to-[#3A4A2E]/50 mb-8 p-6 border border-[#B1AB86]/30 dark:border-[#5D6D4B]/30 rounded-2xl">
+                    <div className="top-1/2 -left-2 absolute bg-gradient-to-b from-[#5D6D4B] to-[#B1AB86] rounded-full w-1 h-16 -translate-y-1/2 transform"></div>
+                    <p className="font-medium text-[#5D6D4B] dark:text-[#B8C4A9] text-lg leading-relaxed">
+                      {personalInfo.shortBio}
+                    </p>
+                  </div>
+
+                  <div className="gap-4 grid grid-cols-1 md:grid-cols-3 mb-8">
+                    <div className="group flex justify-center items-center gap-3 bg-white/80 dark:bg-[#2D3B24]/80 hover:shadow-lg backdrop-blur-sm px-5 py-3 border-[#B1AB86]/30 border-2 rounded-2xl hover:scale-105 transition-all duration-300">
+                      <HiMap className="w-5 h-5 text-[#5D6D4B] dark:text-[#B8C4A9] group-hover:scale-110 transition-transform duration-300" />
+                      <span className="font-medium text-[#7D8566] dark:text-[#8A936D]">
                         {personalInfo.location}
                       </span>
                     </div>
-                    <div className="group flex items-center gap-2 bg-white/80 hover:shadow-lg backdrop-blur-sm px-4 py-2 border border-[#B1AB86]/30 rounded-2xl hover:scale-105 transition-transform duration-300">
-                      <HiMail className="w-4 h-4 text-[#5D6D4B] group-hover:scale-110 transition-transform group-hover:animate-bounce duration-300" />
-                      <span className="text-[#7D8566] text-sm">
+                    <div className="group flex justify-center items-center gap-3 bg-white/80 dark:bg-[#2D3B24]/80 hover:shadow-lg backdrop-blur-sm px-5 py-3 border-[#B1AB86]/30 border-2 rounded-2xl hover:scale-105 transition-all duration-300">
+                      <HiMail className="w-5 h-5 text-[#5D6D4B] dark:text-[#B8C4A9] group-hover:scale-110 transition-transform duration-300" />
+                      <span className="font-medium text-[#7D8566] dark:text-[#8A936D]">
                         {personalInfo.email}
                       </span>
                     </div>
-                    <div className="group flex items-center gap-2 bg-white/80 hover:shadow-lg backdrop-blur-sm px-4 py-2 border border-[#B1AB86]/30 rounded-2xl hover:scale-105 transition-transform duration-300">
-                      <HiPhone className="w-4 h-4 text-[#5D6D4B] group-hover:scale-110 transition-transform group-hover:animate-bounce duration-300" />
-                      <span className="text-[#7D8566] text-sm">
+                    <div className="group flex justify-center items-center gap-3 bg-white/80 dark:bg-[#2D3B24]/80 hover:shadow-lg backdrop-blur-sm px-5 py-3 border-[#B1AB86]/30 border-2 rounded-2xl hover:scale-105 transition-all duration-300">
+                      <HiPhone className="w-5 h-5 text-[#5D6D4B] dark:text-[#B8C4A9] group-hover:scale-110 transition-transform duration-300" />
+                      <span className="font-medium text-[#7D8566] dark:text-[#8A936D]">
                         {personalInfo.phone}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-2">
-                    {technicalExpertise.map((skill, index) => (
+                  <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                    {quickSkills.map((skill, index) => (
                       <span
                         key={index}
-                        className="hover:bg-[#5D6D4B]/20 bg-gradient-to-r from-[#5D6D4B]/10 to-[#B1AB86]/10 hover:shadow-lg px-3 py-1 border border-[#B1AB86]/30 rounded-full font-medium text-[#5D6D4B] text-xs hover:scale-105 transition-all hover:-translate-y-1 animate-fade-in-up duration-300 cursor-default transform"
-                        style={{ animationDelay: `${index * 100 + 400}ms` }}
+                        className="group relative bg-gradient-to-r from-[#5D6D4B]/10 hover:from-[#5D6D4B]/20 dark:from-[#5D6D4B]/20 to-[#B1AB86]/10 hover:to-[#B1AB86]/20 dark:to-[#B1AB86]/20 hover:shadow-lg px-4 py-2 border border-[#B1AB86]/40 dark:border-[#5D6D4B]/40 rounded-full font-semibold text-[#5D6D4B] dark:text-[#B8C4A9] text-sm hover:scale-105 transition-all duration-300 cursor-default transform"
                       >
                         {skill}
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#5D6D4B] to-[#B1AB86] opacity-0 group-hover:opacity-5 rounded-full transition-opacity duration-300"></div>
                       </span>
                     ))}
                   </div>
@@ -220,295 +201,53 @@ export default function HomePage() {
           </div>
 
           <div
-            className={`flex flex-wrap justify-center gap-4 transform transition-all duration-1000 delay-300 ${
+            className={`flex flex-wrap justify-center gap-6 transform transition-all duration-1000 delay-300 ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-10 opacity-0"
             }`}
           >
             <Link
-              href="/project"
-              className="group relative flex items-center gap-3 bg-gradient-to-r from-[#5D6D4B] hover:from-[#4A5741] to-[#6B7A55] hover:to-[#5D6D4B] shadow-lg hover:shadow-xl px-8 py-4 rounded-2xl overflow-hidden font-semibold text-white hover:scale-105 transition-all hover:-translate-y-1 duration-300"
+              href="/projects"
+              className="group relative flex items-center gap-4 bg-gradient-to-r from-[#5D6D4B] hover:from-[#4A5741] to-[#6B7A55] hover:to-[#5D6D4B] shadow-xl hover:shadow-2xl px-10 py-5 rounded-2xl overflow-hidden font-bold text-white hover:scale-105 transition-all duration-300"
             >
               <div className="absolute inset-0 bg-white/10 -skew-x-12 transition-transform -translate-x-full group-hover:translate-x-full duration-1000 transform"></div>
-              <HiCode className="z-10 w-5 h-5 group-hover:scale-110 transition-transform group-hover:animate-spin duration-300" />
-              <span className="z-10">Explore My Portfolio</span>
-              <HiArrowRight className="z-10 w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:animate-pulse duration-300" />
+              <HiCode className="z-10 w-6 h-6 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" />
+              <span className="z-10 text-lg">View My Projects</span>
+              <HiArrowRight className="z-10 w-5 h-5 transition-transform group-hover:translate-x-2 duration-300" />
             </Link>
 
             <Link
               href="/about"
-              className="group flex items-center gap-3 bg-white/90 hover:bg-white shadow-lg hover:shadow-xl px-8 py-4 border border-[#B1AB86]/30 rounded-2xl font-semibold text-[#5D6D4B] hover:scale-105 transition-all hover:-translate-y-1 duration-300"
+              className="group relative flex items-center gap-4 bg-white/90 hover:bg-white dark:bg-[#2D3B24]/90 dark:hover:bg-[#2D3B24] shadow-xl hover:shadow-2xl px-10 py-5 border-[#B1AB86]/40 border-2 dark:border-[#5D6D4B]/40 rounded-2xl font-bold text-[#5D6D4B] dark:text-[#B8C4A9] hover:scale-105 transition-all duration-300"
             >
-              <HiAcademicCap className="w-5 h-5 group-hover:scale-110 transition-transform group-hover:animate-bounce duration-300" />
-              <span>Professional Journey</span>
+              <HiAcademicCap className="w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
+              <span className="text-lg">My Journey</span>
             </Link>
 
-            <a
-              href={personalInfo.cvFile}
-              download="public\TAHSINA TANVIN's Resume (1).pdf"
-              className="group flex items-center gap-3 bg-gradient-to-r from-[#B1AB86] hover:from-[#9C966F] to-[#C8C2A5] hover:to-[#B1AB86] shadow-lg hover:shadow-xl px-8 py-4 rounded-2xl font-semibold text-[#5D6D4B] hover:scale-105 transition-all hover:-translate-y-1 duration-300"
+            <button
+              onClick={handleDownloadResume}
+              className="group relative flex items-center gap-4 bg-gradient-to-r from-[#B1AB86] hover:from-[#9C966F] to-[#C8C2A5] hover:to-[#B1AB86] shadow-xl hover:shadow-2xl px-10 py-5 rounded-2xl font-bold text-[#5D6D4B] dark:text-[#2D3B24] hover:scale-105 transition-all duration-300"
             >
-              <HiDownload className="w-5 h-5 group-hover:scale-110 transition-transform group-hover:animate-bounce duration-300" />
-              <span>Download CV</span>
-            </a>
+              <HiDownload className="w-6 h-6 group-hover:scale-110 transition-transform group-hover:-translate-y-1 duration-300" />
+              <span className="text-lg">Download Resume</span>
+            </button>
           </div>
-        </section>
 
-        <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-16">
-          {achievementMetrics.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <div
-                key={index}
-                className={`bg-white/95 backdrop-blur-sm p-6 border border-[#B1AB86]/30 rounded-2xl shadow-lg text-center hover:scale-105 transition-all duration-300 group transform hover:-translate-y-2 hover:shadow-xl ${
-                  isVisible
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-10 opacity-0"
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <div className="flex justify-center mb-3">
-                  <div className="bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] p-3 rounded-2xl group-hover:rotate-12 group-hover:scale-110 transition-transform group-hover:animate-pulse duration-300">
-                    <Icon className="w-6 h-6 text-white group-hover:animate-bounce" />
-                  </div>
-                </div>
-                <div className="mb-2 font-bold text-[#5D6D4B] text-3xl group-hover:scale-110 transition-transform duration-300">
-                  {stat.number}
-                </div>
-                <div className="font-medium text-[#7D8566] group-hover:text-[#5D6D4B] transition-colors duration-300">
-                  {stat.label}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <section className="mb-16">
-          <div
-            className={`bg-white/95 shadow-2xl backdrop-blur-sm p-8 border border-[#B1AB86]/30 rounded-3xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.01] ${
-              isVisible
-                ? "translate-y-0 opacity-100"
-                : "translate-y-10 opacity-0"
-            }`}
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] p-2 rounded-xl animate-pulse">
-                <HiSparkles className="w-6 h-6 text-white animate-spin-slow" />
-              </div>
-              <h2 className="font-bold text-[#5D6D4B] text-2xl animate-text-shimmer">
-                Technical Expertise
-              </h2>
-            </div>
-
-            <p className="mb-6 text-[#7D8566] text-lg leading-relaxed animate-fade-in-up">
-              Specializing in the development of comprehensive full-stack
-              solutions using cutting-edge technologies. My approach combines
-              robust backend architecture with intuitive frontend interfaces to
-              deliver high-performance web applications.
-            </p>
-
-            <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
-              {coreCompetencies.map((item, index) => (
-                <div
-                  key={index}
-                  className="group flex items-start gap-3 transition-transform hover:translate-x-2 animate-fade-in-up duration-300 transform"
-                  style={{ animationDelay: `${index * 100 + 200}ms` }}
-                >
-                  <div className="flex-shrink-0 bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] mt-1 p-1 rounded-lg group-hover:scale-110 transition-transform group-hover:animate-pulse duration-300">
-                    <HiFire className="w-4 h-4 text-white group-hover:animate-bounce" />
-                  </div>
-                  <span className="text-[#5D6D4B] group-hover:text-[#4A5741] text-sm leading-relaxed transition-colors duration-300">
-                    {item}
-                  </span>
-                </div>
-              ))}
+          <div className="mt-16 animate-bounce">
+            <div className="inline-flex relative flex-col items-center gap-2">
+              <span className="font-semibold text-[#5D6D4B] dark:text-[#B8C4A9] text-sm">
+                Explore More
+              </span>
+              <HiChevronDown className="w-7 h-7 text-[#5D6D4B] dark:text-[#B8C4A9]" />
             </div>
           </div>
         </section>
 
-        <section className="mb-16">
-          <div
-            className={`bg-white/95 shadow-2xl backdrop-blur-sm p-8 border border-[#B1AB86]/30 rounded-3xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.01] ${
-              isVisible
-                ? "translate-y-0 opacity-100"
-                : "translate-y-10 opacity-0"
-            }`}
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-gradient-to-br from-[#5D6D4B] to-[#B1AB86] p-2 rounded-xl animate-pulse">
-                <HiAcademicCap className="w-6 h-6 text-white animate-spin-slow" />
-              </div>
-              <h2 className="font-bold text-[#5D6D4B] text-2xl animate-text-shimmer">
-                Advanced Skill Development
-              </h2>
-            </div>
-
-            <p className="mb-6 text-[#7D8566] text-lg leading-relaxed animate-fade-in-up">
-              Continuously expanding my technical repertoire to stay at the
-              forefront of web development. Currently focusing on
-              enterprise-level technologies and scalable architecture patterns
-              to enhance application performance and deployment efficiency.
-            </p>
-
-            <div className="flex flex-wrap gap-3 mb-6">
-              {currentFocusAreas.map((tech, index) => (
-                <span
-                  key={index}
-                  className="bg-gradient-to-r from-[#B1AB86]/20 to-[#C8C2A5]/20 hover:shadow-lg px-4 py-2 border border-[#B1AB86]/40 rounded-full font-medium text-[#5D6D4B] text-sm hover:scale-105 transition-all hover:-translate-y-1 animate-fade-in-up duration-300 cursor-default"
-                  style={{ animationDelay: `${index * 100 + 300}ms` }}
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <Link
-                href="/about"
-                className="group inline-flex items-center gap-2 bg-white/80 hover:bg-white hover:shadow-lg px-6 py-3 border border-[#B1AB86]/30 rounded-2xl font-semibold text-[#5D6D4B] hover:text-[#4A5741] hover:scale-105 transition-all transition-colors hover:-translate-y-1 duration-300 duration-300"
-              >
-                <span>View Complete Profile</span>
-                <HiArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:animate-pulse duration-300" />
-              </Link>
-            </div>
-          </div>
-        </section>
+        <StatsSection isVisible={isVisible} />
+        <ProfessionalSnapshot isVisible={isVisible} />
+        <CurrentlyLearning isVisible={isVisible} />
       </div>
-
-      <style jsx global>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-20px) rotate(180deg);
-          }
-        }
-        @keyframes float-delayed {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(20px) rotate(-180deg);
-          }
-        }
-        @keyframes float-slow {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-15px) rotate(90deg);
-          }
-        }
-        @keyframes float-reverse {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(15px) rotate(-90deg);
-          }
-        }
-        @keyframes float-slow-delayed {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-10px) rotate(45deg);
-          }
-        }
-        @keyframes particle-float {
-          0%,
-          100% {
-            transform: translateY(0px) translateX(0px) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.3;
-          }
-          90% {
-            opacity: 0.1;
-          }
-          50% {
-            transform: translateY(-100px) translateX(20px) rotate(180deg);
-          }
-        }
-        @keyframes text-shimmer {
-          0% {
-            background-position: -1000px 0;
-          }
-          100% {
-            background-position: 1000px 0;
-          }
-        }
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes pulse-slow {
-          0%,
-          100% {
-            opacity: 0.5;
-          }
-          50% {
-            opacity: 0.8;
-          }
-        }
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        .animate-float {
-          animation: float 8s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float-delayed 10s ease-in-out infinite;
-        }
-        .animate-float-slow {
-          animation: float-slow 12s ease-in-out infinite;
-        }
-        .animate-float-reverse {
-          animation: float-reverse 9s ease-in-out infinite;
-        }
-        .animate-float-slow-delayed {
-          animation: float-slow-delayed 14s ease-in-out infinite;
-        }
-        .animate-particle-float {
-          animation: particle-float 20s ease-in-out infinite;
-        }
-        .animate-text-shimmer {
-          background: linear-gradient(90deg, #5d6d4b, #b1ab86, #5d6d4b);
-          background-size: 1000px 100%;
-          animation: text-shimmer 3s ease-in-out infinite alternate;
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s ease-out forwards;
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 3s ease-in-out infinite;
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        .delay-200 {
-          animation-delay: 200ms;
-        }
-      `}</style>
     </div>
   );
 }
