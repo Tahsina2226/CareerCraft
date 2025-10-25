@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 interface Blog {
   id: string;
   title: string;
@@ -108,11 +110,14 @@ export default function DashboardOverview({
                 className="flex items-center space-x-4 hover:bg-[#B1AB86]/5 p-4 border border-[#B1AB86]/20 rounded-2xl transition-colors duration-200"
               >
                 {blog.coverUrl && (
-                  <img
-                    src={blog.coverUrl}
-                    alt={blog.title}
-                    className="rounded-xl w-12 h-12 object-cover"
-                  />
+                  <div className="relative rounded-xl w-12 h-12">
+                    <Image
+                      src={blog.coverUrl}
+                      alt={blog.title}
+                      fill
+                      className="rounded-xl object-cover"
+                    />
+                  </div>
                 )}
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-[#5D6D4B] text-sm truncate">
@@ -160,11 +165,14 @@ export default function DashboardOverview({
                 className="flex items-center space-x-4 hover:bg-[#B1AB86]/5 p-4 border border-[#B1AB86]/20 rounded-2xl transition-colors duration-200"
               >
                 {project.imageUrl && (
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="rounded-xl w-12 h-12 object-cover"
-                  />
+                  <div className="relative rounded-xl w-12 h-12">
+                    <Image
+                      src={project.imageUrl}
+                      alt={project.title}
+                      fill
+                      className="rounded-xl object-cover"
+                    />
+                  </div>
                 )}
                 <div className="flex-1 min-w-0">
                   <h4 className="font-semibold text-[#5D6D4B] text-sm truncate">

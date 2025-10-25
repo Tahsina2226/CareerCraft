@@ -22,13 +22,11 @@ export default function Navbar(): JSX.Element {
   const { token, logout, user } = useAuth();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrolled(currentScrollY > 10);
+      // Scroll handling logic can be added here if needed
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);

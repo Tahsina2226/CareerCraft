@@ -5,6 +5,15 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import API from "../../../../utils/api";
 import toast from "react-hot-toast";
+import Image from "next/image";
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export default function CreateBlogPage() {
   const { token } = useAuth();
@@ -16,7 +25,11 @@ export default function CreateBlogPage() {
   const [coverUrl, setCoverUrl] = useState("");
   const [published, setPublished] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [charCount, setCharCount] = useState({ title: 0, excerpt: 0, content: 0 });
+  const [charCount, setCharCount] = useState({
+    title: 0,
+    excerpt: 0,
+    content: 0,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,8 +47,9 @@ export default function CreateBlogPage() {
         style: { background: "#B1AB86", color: "#1a1a1a" },
       });
       router.push("/dashboard");
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to create blog", {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      toast.error(apiError.response?.data?.message || "Failed to create blog", {
         style: { background: "#D84A4A", color: "#fff" },
       });
     } finally {
@@ -45,17 +59,17 @@ export default function CreateBlogPage() {
 
   const handleInputChange = (field: string, value: string) => {
     switch (field) {
-      case 'title':
+      case "title":
         setTitle(value);
-        setCharCount(prev => ({ ...prev, title: value.length }));
+        setCharCount((prev) => ({ ...prev, title: value.length }));
         break;
-      case 'content':
+      case "content":
         setContent(value);
-        setCharCount(prev => ({ ...prev, content: value.length }));
+        setCharCount((prev) => ({ ...prev, content: value.length }));
         break;
-      case 'excerpt':
+      case "excerpt":
         setExcerpt(value);
-        setCharCount(prev => ({ ...prev, excerpt: value.length }));
+        setCharCount((prev) => ({ ...prev, excerpt: value.length }));
         break;
     }
   };
@@ -68,22 +82,22 @@ export default function CreateBlogPage() {
       {/* Background Decorations */}
       <div className="top-0 left-0 absolute bg-[#5D6D4B] opacity-5 rounded-full w-72 h-72 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="right-0 bottom-0 absolute bg-[#B1AB86] opacity-5 rounded-full w-96 h-96 translate-x-1/2 translate-y-1/2"></div>
-      
+
       <div className="relative mx-auto max-w-2xl">
         {/* Header Section */}
         <div className="mb-8 text-center">
           <div className="inline-flex justify-center items-center bg-white/80 shadow-lg mb-4 border border-[#B1AB86]/30 rounded-2xl w-16 h-16">
-            <svg 
-              className="w-8 h-8 text-[#5D6D4B]" 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              className="w-8 h-8 text-[#5D6D4B]"
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
               />
             </svg>
           </div>
@@ -106,7 +120,11 @@ export default function CreateBlogPage() {
               <span className="font-semibold text-[#5D6D4B] text-sm uppercase tracking-wide">
                 Blog Title
               </span>
-              <span className={`text-xs ${charCount.title > 80 ? 'text-red-400' : 'text-[#7D8566]'}`}>
+              <span
+                className={`text-xs ${
+                  charCount.title > 80 ? "text-red-400" : "text-[#7D8566]"
+                }`}
+              >
                 {charCount.title}/80
               </span>
             </label>
@@ -115,7 +133,7 @@ export default function CreateBlogPage() {
               placeholder="Enter a captivating title..."
               className="bg-white/50 p-4 border-[#B1AB86]/30 border-2 focus:border-[#B1AB86] rounded-xl focus:outline-none focus:ring-[#B1AB86]/20 focus:ring-2 w-full font-medium text-[#1a1a1a] transition-all duration-200 placeholder-[#7D8566]/60"
               value={title}
-              onChange={(e) => handleInputChange('title', e.target.value)}
+              onChange={(e) => handleInputChange("title", e.target.value)}
               maxLength={80}
               required
             />
@@ -135,7 +153,7 @@ export default function CreateBlogPage() {
               placeholder="Write your amazing content here... (Markdown supported)"
               className="bg-white/50 p-4 border-[#B1AB86]/30 border-2 focus:border-[#B1AB86] rounded-xl focus:outline-none focus:ring-[#B1AB86]/20 focus:ring-2 w-full h-48 font-medium text-[#1a1a1a] leading-relaxed transition-all duration-200 resize-none placeholder-[#7D8566]/60"
               value={content}
-              onChange={(e) => handleInputChange('content', e.target.value)}
+              onChange={(e) => handleInputChange("content", e.target.value)}
               required
             />
           </div>
@@ -146,7 +164,11 @@ export default function CreateBlogPage() {
               <span className="font-semibold text-[#5D6D4B] text-sm uppercase tracking-wide">
                 Excerpt
               </span>
-              <span className={`text-xs ${charCount.excerpt > 160 ? 'text-red-400' : 'text-[#7D8566]'}`}>
+              <span
+                className={`text-xs ${
+                  charCount.excerpt > 160 ? "text-red-400" : "text-[#7D8566]"
+                }`}
+              >
                 {charCount.excerpt}/160
               </span>
             </label>
@@ -155,7 +177,7 @@ export default function CreateBlogPage() {
               placeholder="Brief description of your blog... (optional)"
               className="bg-white/50 p-4 border-[#B1AB86]/30 border-2 focus:border-[#B1AB86] rounded-xl focus:outline-none focus:ring-[#B1AB86]/20 focus:ring-2 w-full font-medium text-[#1a1a1a] transition-all duration-200 placeholder-[#7D8566]/60"
               value={excerpt}
-              onChange={(e) => handleInputChange('excerpt', e.target.value)}
+              onChange={(e) => handleInputChange("excerpt", e.target.value)}
               maxLength={160}
             />
           </div>
@@ -181,14 +203,17 @@ export default function CreateBlogPage() {
                 Cover Preview
               </label>
               <div className="bg-white/50 p-4 border-[#B1AB86]/30 border-2 border-dashed rounded-xl">
-                <img 
-                  src={coverUrl} 
-                  alt="Cover preview" 
-                  className="rounded-lg w-full h-32 object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                <div className="relative w-full h-32">
+                  <Image
+                    src={coverUrl}
+                    alt="Cover preview"
+                    fill
+                    className="rounded-lg object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                </div>
                 <p className="mt-2 text-[#7D8566] text-xs text-center">
                   Cover image preview
                 </p>
@@ -199,13 +224,19 @@ export default function CreateBlogPage() {
           {/* Publish Toggle */}
           <div className="flex justify-between items-center bg-[#F8F7F0] p-4 border border-[#B1AB86]/20 rounded-xl">
             <div className="flex items-center space-x-3">
-              <div className={`w-3 h-3 rounded-full ${published ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'}`}></div>
+              <div
+                className={`w-3 h-3 rounded-full ${
+                  published ? "bg-green-500 animate-pulse" : "bg-yellow-500"
+                }`}
+              ></div>
               <div>
                 <span className="block font-semibold text-[#5D6D4B] text-sm">
-                  {published ? 'Publish Immediately' : 'Save as Draft'}
+                  {published ? "Publish Immediately" : "Save as Draft"}
                 </span>
                 <span className="text-[#7D8566] text-xs">
-                  {published ? 'Blog will be visible to everyone' : 'Only you can see this blog'}
+                  {published
+                    ? "Blog will be visible to everyone"
+                    : "Only you can see this blog"}
                 </span>
               </div>
             </div>
@@ -244,14 +275,27 @@ export default function CreateBlogPage() {
                   <div className="border-2 border-white border-t-transparent rounded-full w-5 h-5 animate-spin"></div>
                 )}
                 <span>
-                  {loading 
-                    ? (published ? "Publishing..." : "Saving...") 
-                    : (published ? "Publish Blog" : "Save as Draft")
-                  }
+                  {loading
+                    ? published
+                      ? "Publishing..."
+                      : "Saving..."
+                    : published
+                    ? "Publish Blog"
+                    : "Save as Draft"}
                 </span>
                 {!loading && (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                    />
                   </svg>
                 )}
               </div>

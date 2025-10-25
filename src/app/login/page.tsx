@@ -6,6 +6,14 @@ import API from "../../../utils/api";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const { setToken } = useAuth();
@@ -27,9 +35,10 @@ export default function LoginPage() {
       setToken(res.data.token);
       toast.success("Login Successful!");
       router.push("/dashboard");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as ApiError;
       toast.error(
-        err.response?.data?.message || "Login failed. Please try again."
+        error.response?.data?.message || "Login failed. Please try again."
       );
     } finally {
       setLoading(false);
@@ -222,7 +231,7 @@ export default function LoginPage() {
 
             <div className="mt-6 text-center">
               <p className="text-[#7D8566] text-sm">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <button
                   className="font-medium text-[#B1AB86] hover:text-[#9c946d] transition duration-200"
                   onClick={() => router.push("/register")}

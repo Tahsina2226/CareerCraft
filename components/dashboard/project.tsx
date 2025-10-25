@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 interface Project {
   id: string;
@@ -121,11 +122,14 @@ export default function ProjectManagement({
             >
               <div className="relative overflow-hidden">
                 {project.thumbnail ? (
-                  <img
-                    src={project.thumbnail}
-                    alt={project.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  <div className="relative w-full h-48">
+                    <Image
+                      src={project.thumbnail}
+                      alt={project.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
                 ) : (
                   <div className="flex justify-center items-center bg-gradient-to-br from-[#5D6D4B]/10 to-[#B1AB86]/10 w-full h-48">
                     <svg

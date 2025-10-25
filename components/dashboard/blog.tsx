@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 interface Blog {
   id: string;
@@ -81,11 +82,14 @@ export default function BlogManagement({
               className="bg-white hover:shadow-xl border border-[#B1AB86]/30 rounded-2xl overflow-hidden hover:scale-[1.02] transition-all duration-300 transform"
             >
               {blog.coverUrl && (
-                <img
-                  src={blog.coverUrl}
-                  alt={blog.title}
-                  className="w-full h-48 object-cover"
-                />
+                <div className="relative w-full h-48">
+                  <Image
+                    src={blog.coverUrl}
+                    alt={blog.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
               <div className="p-6">
                 <div className="flex justify-between items-center mb-3">

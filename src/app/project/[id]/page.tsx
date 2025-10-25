@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import Image from "next/image";
 import API from "../../../../utils/api";
 import toast from "react-hot-toast";
 
@@ -29,7 +29,7 @@ export default function ProjectDetailsPage() {
       try {
         const res = await API.get(`/projects/${id}`);
         setProject(res.data);
-      } catch (err) {
+      } catch {
         toast.error("Failed to load project details");
         router.push("/projects");
       } finally {
@@ -109,10 +109,13 @@ export default function ProjectDetailsPage() {
           {/* Thumbnail */}
           {project.thumbnail && (
             <div className="relative h-80 overflow-hidden">
-              <img
+              <Image
                 src={project.thumbnail}
                 alt={project.title}
                 className="w-full h-full object-cover"
+                width={800}
+                height={320}
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
             </div>

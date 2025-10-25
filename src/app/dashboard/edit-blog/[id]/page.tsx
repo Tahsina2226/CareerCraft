@@ -6,6 +6,15 @@ import { useAuth } from "../../../context/AuthContext";
 import API from "../../../../../utils/api";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import Image from "next/image";
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export default function EditBlogPage() {
   const { token } = useAuth();
@@ -99,10 +108,14 @@ export default function EditBlogPage() {
         style: { background: "#B1AB86", color: "#1a1a1a" },
       });
       router.push("/dashboard");
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to update blog", {
-        style: { background: "#D84A4A", color: "#fff" },
-      });
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      toast.error(
+        apiError.response?.data?.message || "Failed to update blog",
+        {
+          style: { background: "#D84A4A", color: "#fff" },
+        }
+      );
     } finally {
       setLoading(false);
     }
@@ -239,14 +252,17 @@ export default function EditBlogPage() {
                 Cover Preview
               </label>
               <div className="bg-white/50 p-4 border-[#B1AB86]/30 border-2 border-dashed rounded-xl">
-                <img
-                  src={coverUrl}
-                  alt="Cover preview"
-                  className="rounded-lg w-full h-32 object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
+                <div className="relative w-full h-32">
+                  <Image
+                    src={coverUrl}
+                    alt="Cover preview"
+                    fill
+                    className="rounded-lg object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                </div>
                 <p className="mt-2 text-[#7D8566] text-xs text-center">
                   Cover image preview
                 </p>
@@ -403,7 +419,7 @@ export default function EditBlogPage() {
               <div>
                 <div className="font-medium text-[#5D6D4B]">Mark Updated</div>
                 <div className="text-[#7D8566] text-xs">
-                  Add 'Updated' to title
+                  Add &apos;Updated&apos; to title
                 </div>
               </div>
             </button>

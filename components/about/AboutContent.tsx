@@ -8,8 +8,6 @@ import {
   HiCode,
   HiServer,
   HiChip,
-  HiGlobe,
-  HiFire,
   HiSparkles,
   HiExternalLink,
   HiUser,
@@ -96,12 +94,12 @@ export default function AboutContent({ activeTab }: AboutContentProps) {
             <div className="group relative bg-gradient-to-r from-[#5D6D4B]/8 to-[#B1AB86]/8 hover:shadow-md p-6 border-[#5D6D4B] border-l-4 rounded-2xl transition-all duration-300">
               <HiBookmark className="-top-3 left-6 absolute bg-white shadow-md p-1 rounded-lg w-6 h-6 text-[#5D6D4B] group-hover:scale-110 transition-transform" />
               <p className="text-gray-700 text-base italic leading-relaxed">
-                "My development philosophy centers on creating{" "}
+                &quot;My development philosophy centers on creating{" "}
                 <span className="font-semibold text-[#5D6D4B]">
                   architecturally sound, user-centric solutions
                 </span>{" "}
                 that prioritize accessibility, performance, and maintainability
-                while delivering tangible value to end-users."
+                while delivering tangible value to end-users.&quot;
               </p>
             </div>
 
@@ -291,7 +289,7 @@ export default function AboutContent({ activeTab }: AboutContentProps) {
               <div className="bg-gradient-to-r from-[#5D6D4B] to-[#B1AB86] shadow-lg p-2 rounded-xl">
                 <HiUser className="w-6 h-6 text-white" />
               </div>
-              Let's Create Something Amazing Together
+              Let&apos;s Create Something Amazing Together
             </h2>
             <p className="mx-auto max-w-md text-gray-600 text-sm">
               Ready to transform your ideas into exceptional digital
@@ -352,10 +350,11 @@ export default function AboutContent({ activeTab }: AboutContentProps) {
                 Ready to Start Your Project?
               </h3>
               <p className="mb-8 text-gray-700 text-sm leading-relaxed">
-                Whether you're looking to build a new application, improve an
-                existing one, or just want to discuss tech possibilities - I'd
-                love to hear from you. Let's bring your vision to life with
-                clean, efficient code and exceptional user experiences.
+                Whether you&apos;re looking to build a new application, improve
+                an existing one, or just want to discuss tech possibilities -
+                I&apos;d love to hear from you. Let&apos;s bring your vision to
+                life with clean, efficient code and exceptional user
+                experiences.
               </p>
 
               <div className="flex sm:flex-row flex-col justify-center gap-4 mb-8">
@@ -391,7 +390,6 @@ export default function AboutContent({ activeTab }: AboutContentProps) {
                     <HiCode className="w-5 h-5 group-hover:scale-110 transition-transform" />
                     GitHub
                   </a>
-                 
                 </div>
               </div>
             </div>
@@ -399,7 +397,7 @@ export default function AboutContent({ activeTab }: AboutContentProps) {
 
           <div className="mt-8 text-center">
             <p className="text-gray-500 text-xs">
-              💫 Let's build something extraordinary together
+              💫 Let&apos;s build something extraordinary together
             </p>
           </div>
         </div>

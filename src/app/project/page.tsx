@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import API from "../../../utils/api";
 import toast from "react-hot-toast";
 
@@ -28,7 +29,7 @@ export default function ProjectsPage() {
       try {
         const res = await API.get("/projects");
         setProjects(res.data);
-      } catch (err) {
+      } catch {
         toast.error("Failed to load projects");
       } finally {
         setLoading(false);
@@ -170,9 +171,11 @@ export default function ProjectsPage() {
                 <div className="relative overflow-hidden">
                   {project.thumbnail ? (
                     <div className="relative overflow-hidden">
-                      <img
+                      <Image
                         src={project.thumbnail}
                         alt={project.title}
+                        width={400}
+                        height={224}
                         className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
@@ -391,8 +394,8 @@ export default function ProjectsPage() {
               Portfolio Coming Soon
             </h3>
             <p className="mx-auto mb-8 max-w-md font-light text-[#7D8566] text-lg leading-relaxed">
-              I'm currently working on some amazing projects. Check back soon to
-              see my latest work and innovations.
+              I&apos;m currently working on some amazing projects. Check back
+              soon to see my latest work and innovations.
             </p>
             <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#5D6D4B]/10 to-[#B1AB86]/10 px-6 py-4 border border-[#B1AB86]/30 rounded-2xl hover:scale-105 transition-transform duration-300 transform">
               <div className="bg-[#5D6D4B] rounded-full w-2 h-2 animate-pulse"></div>

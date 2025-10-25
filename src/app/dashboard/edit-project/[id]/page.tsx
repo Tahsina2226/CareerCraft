@@ -6,6 +6,15 @@ import { useAuth } from "../../../context/AuthContext";
 import API from "../../../../../utils/api";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import Image from "next/image";
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export default function EditProjectPage() {
   const { token, user } = useAuth();
@@ -82,10 +91,14 @@ export default function EditProjectPage() {
         icon: "🎉",
       });
       router.push("/dashboard");
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to update project", {
-        style: { background: "#D84A4A", color: "#fff" },
-      });
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      toast.error(
+        apiError.response?.data?.message || "Failed to update project",
+        {
+          style: { background: "#D84A4A", color: "#fff" },
+        }
+      );
     } finally {
       setLoading(false);
     }
@@ -410,11 +423,14 @@ export default function EditProjectPage() {
             </h3>
             <div className="bg-white border border-[#B1AB86]/30 rounded-2xl overflow-hidden">
               {thumbnail && (
-                <img
-                  src={thumbnail}
-                  alt="Preview"
-                  className="w-full h-48 object-cover"
-                />
+                <div className="relative w-full h-48">
+                  <Image
+                    src={thumbnail}
+                    alt="Preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
               <div className="p-6">
                 <h4 className="mb-3 font-bold text-[#5D6D4B] text-xl">

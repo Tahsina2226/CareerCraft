@@ -6,6 +6,15 @@ import { useAuth } from "../../context/AuthContext";
 import API from "../../../../utils/api";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import Image from "next/image";
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export default function CreateProjectPage() {
   const { token, user } = useAuth();
@@ -94,7 +103,8 @@ export default function CreateProjectPage() {
       setTimeout(() => {
         router.push("/dashboard");
       }, 2000);
-    } catch (err: any) {
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
       toast.error(
         <div className="flex items-center space-x-3">
           <div className="flex justify-center items-center bg-red-100 rounded-full w-8 h-8">
@@ -113,7 +123,7 @@ export default function CreateProjectPage() {
           <div>
             <p className="font-semibold text-red-800">Creation Failed!</p>
             <p className="text-red-600 text-sm">
-              {err.response?.data?.message || "Please try again"}
+              {apiError.response?.data?.message || "Please try again"}
             </p>
           </div>
         </div>,
@@ -439,11 +449,14 @@ export default function CreateProjectPage() {
             </h3>
             <div className="bg-white border border-[#B1AB86]/30 rounded-2xl overflow-hidden">
               {thumbnail && (
-                <img
-                  src={thumbnail}
-                  alt="Preview"
-                  className="w-full h-48 object-cover"
-                />
+                <div className="relative w-full h-48">
+                  <Image
+                    src={thumbnail}
+                    alt="Preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               )}
               <div className="p-6">
                 <h4 className="mb-3 font-bold text-[#5D6D4B] text-xl">
